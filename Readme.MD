@@ -1,4 +1,4 @@
-WebBlender is a web-based implemented of blender's (the 
+WebBlender is a web-based implemention of blender's (the 
 open-source 3D content creation suite) architectural
 design.  It derives its core types from Blender's SDNA system.
 
