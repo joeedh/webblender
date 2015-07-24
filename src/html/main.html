@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Web Blender</title>
+<style>
+  #canvas2d {
+  }
+  
+  #canvas3d {
+  }
+</style>
+<script src="app.js"></script>
+<script>
+function time_ms() {
+  return window.performance.now();
+}
+
+
+function get_callstack(err) {
+  var callstack = [];
+  var isCallstackPopulated = false;
+  
+  var err_was_undefined = err == undefined;
+  
+  if (err == undefined) {
+    try {
+      _idontexist.idontexist+=0; //doesn't exist- that's the point
+    } catch(err1) {
+      err = err1;
+    }
+  }
+  
+  if (err != undefined) {
+    if (err.stack) { //Firefox
+      var lines = err.stack.split('\n');
+      var len=lines.length;
+      for (var i=0; i<len; i++) {
+        if (1) {
+          lines[i] = lines[i].replace(/@http\:\/\/.*\//, "|")
+          var l = lines[i].split("|")
+          lines[i] = l[1] + ": " + l[0]
+          lines[i] = lines[i].trim()
+          callstack.push(lines[i]);
+        }
+      }
+      
+      //Remove call to printStackTrace()
+      if (err_was_undefined) {
+        //callstack.shift();
+      }
+      isCallstackPopulated = true;
+    }
+  }
+  
+  var limit = 24;
+  if (!isCallstackPopulated) { //IE and Safari
+    var currentFunction = arguments.callee.caller;
+    var i = 0;
+    while (currentFunction && i < 24) {
+      var fn = currentFunction.toString();
+      var fname = fn.substring(fn.indexOf("function") + 8, fn.indexOf('')) || 'anonymous';
+      callstack.push(fname);
+      currentFunction = currentFunction.caller;
+      
+      i++;
+    }
+  }
+  
+  return callstack;
+}
+
+function print_stack(err) {
+  try {
+    var cs = get_callstack(err);
+  } catch (err2) {
+    console.log("Could not fetch call stack.");
+    return;
+  }
+  
+  console.log("Callstack:");
+  for (var i=0; i<cs.length; i++) {
+    console.log(cs[i]);
+  }
+}
+
+//color is optional, green
+function startup_report(message, color) {
+  if (color == undefined)
+    color = "green";
+    
+  //args = new Array(arguments.length+2);
+  
+  console.log("%c " + message + "\n\n", "color:"+color);
+  /*
+  for (var i=0; i<arguments.length; i++) {
+    args[i+2] = arguments[i];
+  }
+  
+  args[0] = "%c"
+  args[1] = "color:green"
+  
+  console.log.apply(console, args);
+  */
+}
+
+function warn(message) {
+  //args = new Array(arguments.length+2);
+  
+  var args = ["%c " + message + "\n", "color:orange"]
+  for (var i=1; i<arguments.length; i++) {
+    args.push(arguments[i]);
+  }
+  
+  console.log.apply(console, args); //("%c " + message + "\n", "color:orange");
+}
+
+function warntrace(message) {
+  //args = new Array(arguments.length+2);
+  
+  var args = ["%c " + message + "\n", "color:orange"]
+  for (var i=1; i<arguments.length; i++) {
+    args.push(arguments[i]);
+  }
+  
+  console.trace.apply(console, args);
+}
+
+window.start_webblender = function() {
+  console.log("starting up!");
+  load_modules();
+  
+  //create underscore aliases for modules,
+  //to access them in debugging console (only!!)
+  for (var k in _defined_modules) {
+    var mod = _defined_modules[k];
+    if (!(mod.loaded))
+      continue;
+      
+    k = "_" + k;
+    window[k] = mod.exports;
+  }
+  
+  //call main startup function
+  _startup.start();
+}
+</script>
+</head>
+<body onload="start_webblender()">
+<canvas id="canvas2d">
+</canvas>
+<canvas id="canvas3d">
+</canvas>
+</body>
+</html>
