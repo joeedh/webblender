@@ -1,11 +1,29 @@
 import 'listbase';
 import * as sdna from 'sdna';
 
+export var DataTypes = {
+}
+
+export var DataNames = {
+}
+
 export class Library extends sdna.bases.Library {
 
 }
 sdna.types.register(Library);
 
+
+export class IDRef {
+  constructor() {
+    this.name = "";
+    this.library = "";
+    this.type = "";
+  }
+  
+  [Symbol.keystr]() {
+    return this.type + this.name + ":" + this.library
+  }
+}
 
 export class ID extends sdna.bases.ID {
 

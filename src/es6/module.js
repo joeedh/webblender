@@ -289,6 +289,10 @@ function es6_import_item(_es6_module, modname, name) {
   }
   
   if (!(name in mod.exports)) {
+    if (!allow_cycles) {
+      throw new Error("'" + name + "' not found in module " + mod.name);
+    }
+    
     if (1||_debug_modules) console.log("name not in exports", name, mod);
     throw new ModuleLoadError("");
   }

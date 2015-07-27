@@ -1,10 +1,33 @@
 "use strict";
 
+import 'polyfill';
+
 import {hashtable} from 'util';
 import * as util from 'util';
 
 import {SDNAParser, ENDIAN_LITTLE, ENDIAN_BIG} from 'sdna';
 import * as sdna_mod from 'sdna';
+
+/*
+class Int64 {
+  constructor(higher, lower) {
+    this.higher = higher;
+    this.lower = lower;
+  }
+  
+  [Symbol.keystr]() {
+    return ""+this.higher+":"+this.lower;
+  }
+  
+  toDouble() {
+    return this.lower | (this.higher<<32);
+  }
+  
+//  valueOf() {
+//    return this.lower | (this.higher<<32);
+//  }
+}
+*/
 
 /*
 polyfill DataView.prototype.get[u]Int64()
@@ -17,19 +40,28 @@ if (DataView.prototype.getUint64Array == undefined) {
         var b1 = this.getUint32(i, endian);
         var b2 = this.getUint32(i+4, endian);
         
-        return b1 | (b2<<32);
+        if (endian)
+          return b1 + b2*Math.pow(2.0, 32);
+        else
+          return b2 + b1*Math.pow(2.0, 32);
     }
+    
     DataView.prototype.getInt64 = function(i, endian) {
         var b1 = this.getUint32(i, endian);
         var b2 = this.getUint32(i+4, endian);
         
-        var ret = b1 | (b2<<32);
-        
-        if (b2 & ((1<<32)-1)) {
-          ret = -Math.abs(b1 | (b2<<32));
+        if (!endian) {
+          var t = b1; b1 = b2; b2 = t;
         }
         
-        return ret;
+        if (b2 & ((1<<32)-1)) {
+          b1 = ~b1;
+          b2 = ~b2;
+          
+          return -(b1 + b2*Math.pow(2.0, 32));
+        }
+        
+        return b1 + b2*Math.pow(2.0, 32);
     }
 }
 
@@ -284,7 +316,7 @@ export function load_file(fd) {
       var next = fd.tell() + bh.len;
       
       if (bh.code == "DATA") {
-        console.log("- reading ", bh.code);
+        //console.log("- reading ", bh.code);
         var obj = sdna.read(bh, fd);
 
         oldmap.set(bh.old, obj);
@@ -292,7 +324,7 @@ export function load_file(fd) {
       } else if (bh.code == "ENDB") {
         break;
       } else if (bh.code != "DNA1") {
-        console.log("- reading block type", bh.code);
+        //console.log("- reading block type", bh.code);
         
         var block = sdna.read(bh, fd);
         oldmap.set(bh.old, block);
@@ -346,7 +378,7 @@ export function load_file(fd) {
     }
     
     
-    console.log(data);
-    console.log(libblocks);
-    console.log(oldmap);
+    //console.log(data);
+    //console.log(libblocks);
+    //console.log(oldmap);
 }

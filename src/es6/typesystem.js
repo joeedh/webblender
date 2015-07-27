@@ -7,7 +7,7 @@
   be implemented later.
   
   All defined object types are stored in the global variable 
-  defined_classes (which is a GArray).
+  defined_classes (which is an Array).
   
   Each constructor function has the following properties:
     prototype                 : The prototype; if inherited is created 
@@ -21,7 +21,6 @@
                                 define_static()
 */
 
-//this actually ends up being a GArray
 var defined_classes = new Array();
 var defined_tests = new Array();
 

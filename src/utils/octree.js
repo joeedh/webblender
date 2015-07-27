@@ -11,7 +11,7 @@ class OcNodeCache {
 
 export class OcNode {
   constructor(Array<float> min, Array<float> max) {
-    this.children = new GArray();
+    this.children = new Array();
     this.data = undefined;
     this.idata = undefined;
     
@@ -103,8 +103,8 @@ export class OcNode {
           var c = new OcNode(min, max);
           
           c.leaf = true;
-          c.data = new GArray();
-          c.idata = new GArray();
+          c.data = new Array();
+          c.idata = new Array();
           
           this.children.push(c);
         }
@@ -159,8 +159,8 @@ class OcTree {
     
     this.root = new OcNode(min, max);
     this.root.leaf = true;
-    this.root.data = new GArray();
-    this.root.idata = new GArray();
+    this.root.data = new Array();
+    this.root.idata = new Array();
   }
     
   add_tri(Array<float> v1, Array<float> v2, Array<float> v3, int idx) {

@@ -13,6 +13,9 @@ export class ToolStack {
     this.undocur = -1;
   }
   
+  default_inputs(ctx, toolop) {
+  }
+  
   exec_tool(tool) {
     var ctx = tool.is_modal ? new ModalContext() : new ToolContext();
     

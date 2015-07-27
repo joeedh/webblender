@@ -714,7 +714,7 @@ function gen_circle(m, origin, r, stfeps) {
   var f = -pi/2;
   var df = (pi*2)/stfeps;
   
-  var verts = new GArray();
+  var verts = new Array();
   for (var i =0; i<stfeps; i++) {
     var x = origin[0] + r*Math.sin(f);
     var y = origin[1] + r*Math.cos(f);
@@ -738,7 +738,7 @@ function makeCircleMesh(gl, radius, stfeps) {
   
   var verts1 = gen_circle(mesh, new Vector3(), radius, stfeps);
   var verts2 = gen_circle(mesh, new Vector3(), radius/1.75, stfeps);
-  mesh.make_face_complex(new GArray([verts1, verts2]));
+  mesh.make_face_complex([verts1, verts2]);
   
   //mesh.make_face(verts1);
   
@@ -781,7 +781,7 @@ var _sh_minv = new Vector3()
 var _sh_maxv = new Vector3()
 var _sh_start = []
 var _sh_end = []
-function spatialhash(init, cellsize) { //=new GArray(), cellsize=0.25)
+function spatialhash(init, cellsize) { //=new Array(), cellsize=0.25)
   if (cellsize == undefined)
     cellsize = 0.25;
     

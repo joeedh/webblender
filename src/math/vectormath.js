@@ -15,6 +15,7 @@ var DOT_NORM_SNAP_LIMIT = 0.00000000001;
 var basic_funcs = {
   zero    : [[], "0.0;"],
   negate  : [[], "-this[X];"],
+  loadXYZ : [["x", "y", "z"], "arguments[X]"],
   combine : [["b", "u", "v"], "this[X]*u + this[X]*v;"],
   interp  : [["b", "t"], "this[X] + (b[X] - this[X])*t;"],
   add    : [["b"], "this[X] + b[X];"],

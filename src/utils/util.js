@@ -240,8 +240,8 @@ export class hashtable {
     return new HashKeyIter(this)
   }
 
-  values() : GArray<Object> {
-    var ret = new GArray();
+  values() : Array<Object> {
+    var ret = new Array();
     for (var k in this) {
       ret.push(this.items[k]);
     }
@@ -249,7 +249,7 @@ export class hashtable {
     return ret;
   }
 
-  keys() : GArray<Object> {
+  keys() : Array<Object> {
     return list(this);
   }
 
@@ -305,4 +305,41 @@ export function list(iterable) {
   }
   
   return ret;
+}
+
+/*
+ extjs suppports multiple inheritance (I think it was in 
+ an earlier version of the ES6 draft).
+ 
+ but, ES6 final does not, so we have to use this mixin function
+*/
+export function mixin(child, parent) {
+    for (var k in parent.prototype) {
+      var v = parent.prototype[k];
+      
+      if (!(k in child.prototype)) {
+        child.prototype[k] = v;
+      }
+    }
+}
+
+export var time_ms = window.time_ms;
+
+export class Timer {
+  constructor(interval_ms) {
+    this.ival = interval_ms;
+    this.normval = 0.0; //elapsed time scaled by timer interval
+    this.last_ms = time_ms();
+  }
+
+  ready() {
+    this.normval = (time_ms() - this.last_ms) / this.ival;
+    
+    if (time_ms() - this.last_ms > this.ival) {
+      this.last_ms = time_ms();
+      return true;
+    }
+    
+    return false;
+  }
 }

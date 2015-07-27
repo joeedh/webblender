@@ -15,12 +15,20 @@ if (self.Symbol == undefined) {
     _syms[i] = str;
     return i;
   }
+  
   self.Symbol = {
     iterator : "_sym"+gen_sym("iterator"),
     keystr   : "_sym"+gen_sym("keystr")
   }
 } else {
   Symbol.keystr = Symbol("keystr");
+}
+
+if (Array.prototype.reset == undefined) {
+  Array.prototype.reset = function() {
+    this.splice(0, this.length);
+    this.length = 0;
+  }
 }
 
 if (Math.sign == undefined) {
@@ -58,6 +66,7 @@ class PolyFillArrayIter {
     }
     
     ret.value = this.array[this.i++];
+    
     return ret;
   }
 }
@@ -65,6 +74,27 @@ class PolyFillArrayIter {
 if (Array.prototype[Symbol.iterator] == undefined) {
   Array.prototype[Symbol.iterator] = function() {
     return new PolyFillArrayIter(this);
+  }
+}
+
+if (Array.prototype.replace == undefined) {
+  Array.prototype.replace = function(a, b, ignore_error=false) {
+    var i = this.indexOf(a);
+    
+    if (i < 0) {
+      console.trace("Item not in array", a, b);
+      
+      if (!ignore_error) {
+        throw new Error("Item not in array");
+      }
+      
+      return;
+    }
+    
+    var ret = this[i];
+    this[i] = b;
+    
+    return ret;
   }
 }
 
