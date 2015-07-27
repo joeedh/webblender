@@ -6,6 +6,8 @@ The goal is to have something flexible enough that it can read
 and write .blends while preserving information it does not 
 understand (currently reading works).
 
+You can see it's current state at http://joeedh.github.io/webblender/ 
+
 # Building #
 
 WebBlender is written in ES6, and currently comes with it's very own,
