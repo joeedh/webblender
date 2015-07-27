@@ -4506,7 +4506,13 @@ es6_module_define('net', [], function _net_module(_es6_module) {
     return promise;
   }
   fetch_file = _es6_module.add_export('fetch_file', fetch_file);
-  fetch_file("/blendfile.blend").then(function(data) {
+  var href=document.location.href;
+  if (href[href.length-1]!="/") {
+      href+="/";
+  }
+  var startup_url=href+"blendfile.blend";
+  startup_url = _es6_module.add_export('startup_url', startup_url);
+  fetch_file(startup_url).then(function(data) {
     console.log("got startup .blend");
     window._startup_blend = data;
   });
