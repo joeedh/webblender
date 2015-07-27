@@ -30,7 +30,13 @@ export function fetch_file(url, response_type="arraybuffer") {
   return promise;
 }
 
-fetch_file("/blendfile.blend").then(function(data) {
+var href = document.location.href;
+if (href[href.length-1] != "/") {
+  href += "/"
+}
+
+export var startup_url = href + "blendfile.blend";
+fetch_file(startup_url).then(function(data) {
     console.log("got startup .blend");
     window._startup_blend = data;
 });
