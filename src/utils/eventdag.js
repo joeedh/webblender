@@ -296,7 +296,7 @@ export class EventDag {
   }
   
   reset_cache() {
-    for (var n in this.nodes) {
+    for (var n of this.nodes) {
       if (n instanceof IndirectNode) {
         n._owner = undefined;
       }

@@ -23,7 +23,7 @@ export class Screen extends sdna.bases.Screen {
       console.log("activating!");
       this.is_active = true;
       
-      for (var area in this.areabase) {
+      for (var area of this.areabase) {
         area.create();
       }
       
@@ -36,7 +36,7 @@ export class Screen extends sdna.bases.Screen {
       console.log("inactivating");
       this.is_active = false;
       
-      for (var area in this.areabase) {
+      for (var area of this.areabase) {
         area.destroy();
       }
       //this.canvas.destroy();
@@ -79,7 +79,7 @@ export class Screen extends sdna.bases.Screen {
       var x = e.x, y = e.y;
       var ret;
       
-      for (var area in this.areabase) {
+      for (var area of this.areabase) {
         var r = area.totrct;
         
         if (x >= r.xmin && x <= r.xmax && y >= r.ymin && y <= r.ymax) {
@@ -207,7 +207,7 @@ export class Screen extends sdna.bases.Screen {
     }
     
     draw_ui(g) {
-      for (var area in this.areabase) {
+      for (var area of this.areabase) {
         g.save();
         g.translate(area.totrct.xmin, area.totrct.ymin);
         

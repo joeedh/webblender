@@ -1,3 +1,5 @@
+import 'polyfill';
+
 //the all-important object recycling class
 export class cachering extends Array {
   constructor(func, size) {
@@ -300,7 +302,7 @@ export class IDGen {
 export function list(iterable) {
   var ret = [];
   
-  for (var item in iterable) {
+  for (var item of iterable) {
     ret.push(item);
   }
   
